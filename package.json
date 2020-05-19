@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha chai",
+    "test": "mocha tests/app.spec.js",
     "start": "node app.js"
   },
   "repository": {
