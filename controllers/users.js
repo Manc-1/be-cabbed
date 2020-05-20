@@ -2,7 +2,7 @@ const User = require("../model/user.js");
 const argon2 = require("argon2");
 require("dotenv/config");
 
-exports.sendUserById = (req, res, next) => {
+exports.sendUserById = (req, res) => {
   const { _id } = req.params;
   User.findOne({ _id }, (err, user) => {
     if (err) res.status(404).send("Id not found");
@@ -10,29 +10,41 @@ exports.sendUserById = (req, res, next) => {
       res.status(200).send({
         user: { ...user._doc, password: null },
       });
-  }).catch(next);
+  });
 };
 
 exports.createNewUser = async (req, res, next) => {
-  const username = req.body.name;
-  const password = req.body.password;
+  const { name, password, email, phoneNumber, postCode, userAvatar } = req.body;
   let hash;
-  try {
-    hash = await argon2.hash(password, process.env.hashSalt);
-    const myuser = new User({ name: username, password: hash });
-    await myuser.save();
-    const { name, _id } = myuser;
-    res.status(200).send({ user: { ...myuser._doc, password: null } });
-  } catch (err) {
-    console.log(err);
-    res.send("message: err");
+  let emailtest = await User.findOne({ email }).then((result) => {
+    return result;
+  });
+  if (emailtest != null) {
+    res.status(400).send("E-mail adress is already taken");
+  } else {
+    try {
+      hash = await argon2.hash(password, process.env.hashSalt);
+      const myuser = new User({
+        name,
+        password: hash,
+        email,
+        phoneNumber,
+        postCode,
+        userAvatar,
+      });
+      await myuser.save();
+      res.status(200).send({ user: { ...myuser._doc, password: null } });
+    } catch (err) {
+      console.log(err);
+      res.send("message: err");
+    }
   }
 };
 
 exports.loginUser = async (req, res, next) => {
-  let username = req.body.name;
+  let email = req.body.email;
   let password = req.body.password;
-  User.findOne({ name: username }, async function (err, user) {
+  User.findOne({ email }, async function (err, user) {
     try {
       if (err) {
         console.log(err);
