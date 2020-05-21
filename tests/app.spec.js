@@ -50,7 +50,7 @@ describe("/api", () => {
         });
     });
   });
-  describe.only("/users/:_id", () => {
+  describe("/users/:_id", () => {
     it("finds one user by id from the database", () => {
       return request(app)
         .get("/api/users/5ec53aa45d42141d25c16a95")
@@ -92,4 +92,15 @@ describe("/api", () => {
   //         })
   //     })
   // })
+  describe('/data', () => {
+    it('POST - Saves new data to the database in the correct format', () => {
+      return request(app)
+        .post("/api/data")
+        .send({points:[ {latitude:3.33333, longitude:43.555} , {latitude:3.33333, longitude:43.555} ], type: 'police'})
+        .expect(200)
+        .then(({ body: { data } }) => {
+          console.log(data)
+        });
+    });
+  })
 });
