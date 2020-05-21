@@ -9,7 +9,6 @@ const { handleCustomErrors, handle500s } = require("./errors");
 const User = require("./model/user");
 
 const app = express();
-const port = 9090;
 
 mongoose.Promise = global.Promise;
 
@@ -19,6 +18,8 @@ app.use("/api", apiRouter);
 
 app.use(handleCustomErrors);
 app.use(handle500s);
+
+const port = process.env.PORT || 3000;
 
 app.listen(port, () =>
   console.log(`Example app listening at http://localhost:${port}`)
