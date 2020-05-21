@@ -121,4 +121,15 @@ describe("/api", () => {
   //         })
   //     })
   // })
+  describe('/data', () => {
+    it('POST - Saves new data to the database in the correct format', () => {
+      return request(app)
+        .post("/api/data")
+        .send({points:[ {latitude:3.33333, longitude:43.555} , {latitude:3.33333, longitude:43.555} ], type: 'police'})
+        .expect(200)
+        .then(({ body: { data } }) => {
+          console.log(data)
+        });
+    });
+  })
 });
