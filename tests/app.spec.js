@@ -4,18 +4,6 @@ const app = require("../app");
 const request = require("supertest");
 
 describe("/api", () => {
-  // describe('Saving new users', (done) => {
-  //     it('saves a new user to the database', () => {
-  //         const user = new User({
-  //             name:'joanna',
-  //             password:'password123'
-  //         })
-  //         user.save().then(() => {
-  //             expect(user.isNew).to.equal(false)
-  //         done();
-  //         })
-  //     })
-  // })
   describe("/users/login", () => {
     it("Check if user excist in database and confirm by sending user object", () => {
       return request(app)
@@ -38,7 +26,7 @@ describe("/api", () => {
         });
     });
   });
-  describe.only("/users/create_user", () => {
+  describe("/users/create_user", () => {
     it("Posts a new user to the database and returns the user object", () => {
       return request(app)
         .post("/api/users/create_user")
@@ -102,34 +90,27 @@ describe("/api", () => {
         });
     });
   });
-  // describe('delete user', () => {
-  //     beforeEach((done) => {
-  //         const user = new User({
-  //             name:'joanna',
-  //             password:'password123'
-  //         })
-  //         user.save().then(() => {
-  //         done();
-  //         })
-  //     })
-  //     it('deletes user from database', () => {
-  //         User.findOneAndRemove({name:'joanna'}).then(() => {
-  //             User.findOne({name:'joanna'}).then((res) => {
-  //                 expect(res).to.equal(null)
-  //                 done()
-  //             })
-  //         })
-  //     })
-  // })
-  describe.only('/data', () => {
-    it('POST - Saves new data to the database in the correct format', () => {
+  describe('/data', () => {
+    it('GET - gets all data from the database in the correct format', () => {
       return request(app)
         .get("/api/data/")
-        // .send({points:[ {latitude:3.33333, longitude:43.555} , {latitude:3.33333, longitude:43.555} ], type: 'police'})
         .expect(200)
         .then(({ body: { data } }) => {
-          console.log(data)
+          expect(data).to.be.an('array')
         });
     });
+    it('POST - saves new data to database', () => {
+      return request(app)
+        .post('/api/data/')
+        .send({
+          points: [{latitude:3.33333, longitude:43.555} , {latitude:3.33333, longitude:43.555}],
+          type: 'closing',
+        })
+        .expect(200)
+        .then(({body:{data}}) => {
+          expect(data._doc.points).to.eql([{latitude:3.33333, longitude:43.555} , {latitude:3.33333, longitude:43.555}])
+          expect(data._doc.type).to.eql('closing')
+        })
+    })
   })
 });
