@@ -21,45 +21,74 @@ describe("/api", () => {
       return request(app)
         .post("/api/users/login")
         .send({
-          name: "Test2",
+          email: "Test2@testing.com",
           password: "testing22",
         })
         .expect(200)
         .then(({ body: { user } }) => {
           expect(user).to.eql({
-            _id: "5ec53aa45d42141d25c16a95",
-            name: "Test2",
+            _id: "5ec557933303033c03651588",
+            name: "Niels",
             password: null,
+            email: "Test2@testing.com",
+            phoneNumber: "077888888",
+            postCode: "WA16 9QJ",
             __v: 0,
           });
         });
     });
   });
-  describe("/users/create_user", () => {
+  describe.only("/users/create_user", () => {
     it("Posts a new user to the database and returns the user object", () => {
       return request(app)
         .post("/api/users/create_user")
         .send({
-          name: "Niels2103456",
+          name: "Niels",
+          email: "Test22@testing.com",
+          phoneNumber: "077888888",
           password: "testing22",
+          postCode: "WA16 9QJ",
+          UserAvatar:
+            "https://www.oneworldplayproject.com/wp-content/uploads/2016/03/avatar-1024x1024.jpg",
         })
         .expect(200)
         .then(({ body: { user } }) => {
-          expect(user.name).to.eql("Niels2103456");
+          expect(user.name).to.eql("Niels");
           expect(user.password).to.eql(null);
+          expect(user.postCode).to.eql("WA16 9QJ");
+        });
+    });
+    it("Returns a 400 error message when e-mail is already in database", () => {
+      return request(app)
+        .post("/api/users/create_user")
+        .send({
+          name: "Niels",
+          email: "Test2@testing.com",
+          phoneNumber: "077888888",
+          password: "testing22",
+          postCode: "WA16 9QJ",
+          UserAvatar:
+            "https://www.oneworldplayproject.com/wp-content/uploads/2016/03/avatar-1024x1024.jpg",
+        })
+        .expect(400)
+        .then(({ text }) => {
+          expect(text).to.eql("E-mail adress is already taken");
         });
     });
   });
-  describe.only("/users/:_id", () => {
+  describe("/users/:_id", () => {
     it("finds one user by id from the database", () => {
       return request(app)
-        .get("/api/users/5ec53aa45d42141d25c16a95")
+        .get("/api/users/5ec557933303033c03651588")
         .expect(200)
         .then(({ body: { user } }) => {
           expect(user).to.eql({
-            _id: "5ec53aa45d42141d25c16a95",
-            name: "Test2",
+            _id: "5ec557933303033c03651588",
+            name: "Niels",
+            email: "Test2@testing.com",
             password: null,
+            postCode: "WA16 9QJ",
+            phoneNumber: "077888888",
             __v: 0,
           });
         });
