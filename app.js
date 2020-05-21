@@ -19,9 +19,7 @@ app.use("/api", apiRouter);
 app.use(handleCustomErrors);
 app.use(handle500s);
 
-const port = process.env.PORT || 3000;
-
-app.listen(port, () =>
+app.listen(process.env.PORT || 3000, () =>
   console.log(`Example app listening at http://localhost:${port}`)
 );
 
