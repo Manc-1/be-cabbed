@@ -20,7 +20,7 @@ app.use(handleCustomErrors);
 app.use(handle500s);
 
 app.listen(process.env.PORT || 3000, () =>
-  console.log(`Example app listening at http://localhost:${port}`)
+  console.log(`Example app listening at http://localhost:${process.env.PORT}`)
 );
 
 module.exports = app;
