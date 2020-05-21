@@ -90,27 +90,32 @@ describe("/api", () => {
         });
     });
   });
-  describe('/data', () => {
+  describe.only('/pickup', () => {
     it('GET - gets all data from the database in the correct format', () => {
       return request(app)
-        .get("/api/data/")
+        .get("/api/pickup")
         .expect(200)
-        .then(({ body: { data } }) => {
-          expect(data).to.be.an('array')
+        .then(({ body: { pickup } }) => {
+          expect(pickup).to.be.an('array')
         });
     });
     it('POST - saves new data to database', () => {
       return request(app)
-        .post('/api/data/')
-        .send({
-          points: [{latitude:3.33333, longitude:43.555} , {latitude:3.33333, longitude:43.555}],
-          type: 'closing',
-        })
+        .post('/api/pickup')
+        .send({lat:5.33333, long:35.555})
         .expect(200)
-        .then(({body:{data}}) => {
-          expect(data._doc.points).to.eql([{latitude:3.33333, longitude:43.555} , {latitude:3.33333, longitude:43.555}])
-          expect(data._doc.type).to.eql('closing')
+        .then(({body:{pickup}}) => {
+          expect(pickup._doc.lat).to.eql(5.33333)
+          expect(pickup._doc.long).to.eql(35.555)
         })
     })
+    // it.only('accepts a query for a type and returns data for only that type', () => {
+    //     return request(app)
+    //       .get('/api/data?topic=closing')
+    //       .expect(200)
+    //       .then(({body:{data}}) => {
+    //         expect(data.length).to.equal(8)
+    //       })
+    // })
   })
 });
