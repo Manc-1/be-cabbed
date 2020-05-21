@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const timestamps = require('mongoose-timestamp');
 
 const Data = new mongoose.Schema({
   points: [{}],
@@ -6,7 +7,7 @@ const Data = new mongoose.Schema({
   type: String
 });
 
-//need to install mongoose-timestamp and require timestamp for the schema but leave as string for now
+Data.plugin(timestamps);
 
 
 module.exports = mongoose.model("data", Data);
