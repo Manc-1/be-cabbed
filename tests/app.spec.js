@@ -4,7 +4,7 @@ const app = require("../app");
 const request = require("supertest");
 
 describe("/api", () => {
-  describe.only("/users/login", () => {
+  describe("/users/login", () => {
     it("Check if user excist in database and confirm by sending user object", () => {
       return request(app)
         .post("/api/users/login")
@@ -190,7 +190,7 @@ describe("/api", () => {
           expect(marker).to.be.an("array");
         });
     });
-    it("POST - saves new markers to database", () => {
+    it.only("POST - saves new markers to database", () => {
       return request(app)
         .post('/api/marker')
         .send({lat:6.35333, long:33.535, type: 'police'})
@@ -199,6 +199,7 @@ describe("/api", () => {
           expect(marker._doc.lat).to.eql(6.35333)
           expect(marker._doc.long).to.eql(33.535)
           expect(marker._doc.type).to.eql('police')
+          expect(marker._doc).to.have.keys(['_id', 'date', 'time', "__v", "lat", "long","type"])
         })
     })
     describe('/marker/hour', () => {
