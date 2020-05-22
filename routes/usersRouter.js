@@ -5,10 +5,12 @@ const {
   loginUser,
 } = require("../controllers/users");
 
-usersRouter.route("/:_id").get(sendUserById);
+const { send405Error } = require("../errors/index");
 
-usersRouter.route("/create_user").post(createNewUser);
+usersRouter.route("/user_id/:_id").get(sendUserById).all(send405Error);
 
-usersRouter.route("/login").post(loginUser);
+usersRouter.route("/create_user").post(createNewUser).all(send405Error);
+
+usersRouter.route("/login").post(loginUser).all(send405Error);
 
 module.exports = usersRouter;
