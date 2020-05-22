@@ -5,7 +5,7 @@ require("dotenv/config");
 exports.sendUserById = (req, res) => {
   const { _id } = req.params;
   User.findOne({ _id }, (err, user) => {
-    if (err) res.status(404).send("Id not found");
+    if (err) res.status(404).send({ msg: "Id not found" });
     else
       res.status(200).send({
         user: { ...user._doc, password: null },
@@ -33,7 +33,7 @@ exports.createNewUser = async (req, res, next) => {
         userAvatar,
       });
       await myuser.save();
-      res.status(200).send({ user: { ...myuser._doc, password: null } });
+      res.status(201).send({ user: { ...myuser._doc, password: null } });
     } catch (err) {
       console.log(err);
       res.send("message: err");
@@ -44,21 +44,22 @@ exports.createNewUser = async (req, res, next) => {
 exports.loginUser = async (req, res, next) => {
   let email = req.body.email;
   let password = req.body.password;
+  if (!email || !password) {
+    return res.status(400).send({ msg: "Bad request" });
+  }
   User.findOne({ email }, async function (err, user) {
     try {
-      if (err) {
-        console.log(err);
-        return res.status(500).send("500");
-      }
       if (!user) {
-        return res.status(404).send("404");
+        return res.status(404).send({ msg: "E-mail not found" });
       }
       encodedHash = user.password;
       if (await argon2.verify(encodedHash, password)) {
-        return res.status(200).send({ user: { ...user._doc, password: null } });
+        return res.status(201).send({ user: { ...user._doc, password: null } });
+      } else {
+        return res.status(404).send({ msg: "Password incorrect" });
       }
     } catch (err) {
-      res.status(404).send("All goes up");
+      res.status(500).send({ msg: "Something went wrong" });
     }
   });
 };
