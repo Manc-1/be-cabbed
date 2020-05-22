@@ -122,6 +122,33 @@ describe("/api", () => {
           expect(text).to.eql("E-mail adress is already taken");
         });
     });
+    it("Returns a 400 error message when any required fields are missing", () => {
+      return request(app)
+        .post("/api/users/create_user")
+        .send({
+          name: "Niels",
+          email: "Testasdas2@testing.com",
+          phoneNumber: "077888888",
+          userAvatar:
+            "https://www.oneworldplayproject.com/wp-content/uploads/2016/03/avatar-1024x1024.jpg",
+        })
+        .expect(400)
+        .then(({ text }) => {
+          expect(text).to.eql("Error while processing user entry to database");
+        });
+    });
+    it("Responds with statuscode 405, and an error message when invalid request methods are used", () => {
+      const invalidMethods = ["get", "patch", "delete", "put"];
+      const methodPromises = invalidMethods.map((method) => {
+        return request(app)
+          [method]("/api/users/create_user")
+          .expect(405)
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal("Method not allowed");
+          });
+      });
+      return Promise.all(methodPromises);
+    });
   });
   describe("/users/user_id/:_id", () => {
     it("finds one user by id from the database", () => {
@@ -150,8 +177,8 @@ describe("/api", () => {
     });
   });
 
-  describe('/pickup', () => {
-    it.only('GET - gets all data from the database in the correct format, from the last hour', () => {
+  describe("/pickup", () => {
+    it.only("GET - gets all data from the database in the correct format, from the last hour", () => {
       return request(app)
         .get("/api/pickup")
         .expect(200)
@@ -177,21 +204,19 @@ describe("/api", () => {
     //         expect(data.length).to.equal(8)
     //       })
     // })
-
-  })
-  describe.only('/pickup/hour', () => {
-    it('GET - gets all pickups from past hour', () => {
+  });
+  describe.only("/pickup/hour", () => {
+    it("GET - gets all pickups from past hour", () => {
       return request(app)
         .get("/api/pickup/hour")
         .expect(200)
         .then(({ body: { pickup } }) => {
-          expect(pickup).to.be.an('array')
+          expect(pickup).to.be.an("array");
         });
-    })
-  })
-  describe('/marker', () => {
-    it('GET - gets all markers from the database in the correct format', () => {
-
+    });
+  });
+  describe("/marker", () => {
+    it("GET - gets all markers from the database in the correct format", () => {
       return request(app)
         .get("/api/marker")
         .expect(200)
