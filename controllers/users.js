@@ -20,7 +20,7 @@ exports.createNewUser = async (req, res, next) => {
     return result;
   });
   if (emailtest != null) {
-    res.status(400).send("E-mail adress is already taken");
+    res.status(400).send({ msg: "E-mail adress is already in the Database" });
   } else {
     try {
       hash = await argon2.hash(password, process.env.hashSalt);
@@ -35,8 +35,9 @@ exports.createNewUser = async (req, res, next) => {
       await myuser.save();
       res.status(201).send({ user: { ...myuser._doc, password: null } });
     } catch (err) {
-      console.log(err);
-      res.send("message: err");
+      res
+        .status(400)
+        .send({ msg: "Error while processing user entry to database" });
     }
   }
 };
