@@ -4,7 +4,7 @@ const app = require("../app");
 const request = require("supertest");
 
 describe("/api", () => {
-  describe.only("/users/login", () => {
+  describe("/users/login", () => {
     it("Check if user excist in database and confirm by sending user object", () => {
       return request(app)
         .post("/api/users/login")
@@ -177,8 +177,9 @@ describe("/api", () => {
     });
   });
 
-  describe("/pickup", () => {
-    it.only("GET - gets all data from the database in the correct format, from the last hour", () => {
+
+  describe('/pickup', () => {
+    it('GET - gets all data from the database in the correct format, from the last hour', () => {
       return request(app)
         .get("/api/pickup")
         .expect(200)
@@ -196,17 +197,9 @@ describe("/api", () => {
           expect(pickup._doc.long).to.eql(54.555);
         });
     });
-    // it.only('accepts a query for a type and returns data for only that type', () => {
-    //     return request(app)
-    //       .get('/api/data?topic=closing')
-    //       .expect(200)
-    //       .then(({body:{data}}) => {
-    //         expect(data.length).to.equal(8)
-    //       })
-    // })
-  });
-  describe.only("/pickup/hour", () => {
-    it("GET - gets all pickups from past hour", () => {
+  })
+  describe('/pickup/hour', () => {
+    it('GET - gets all pickups from past hour', () => {
       return request(app)
         .get("/api/pickup/hour")
         .expect(200)
@@ -224,16 +217,27 @@ describe("/api", () => {
           expect(marker).to.be.an("array");
         });
     });
-    it("POST - saves new markers to database", () => {
+    it.only("POST - saves new markers to database", () => {
       return request(app)
-        .post("/api/marker")
-        .send({ lat: 5.33333, long: 43.555, type: "closing" })
+        .post('/api/marker')
+        .send({lat:6.35333, long:33.535, type: 'police'})
         .expect(200)
-        .then(({ body: { marker } }) => {
-          expect(marker._doc.lat).to.eql(5.33333);
-          expect(marker._doc.long).to.eql(43.555);
-          expect(marker._doc.type).to.eql("closing");
-        });
-    });
-  });
+        .then(({body:{marker}}) => {
+          expect(marker._doc.lat).to.eql(6.35333)
+          expect(marker._doc.long).to.eql(33.535)
+          expect(marker._doc.type).to.eql('police')
+          expect(marker._doc).to.have.keys(['_id', 'date', 'time', "__v", "lat", "long","type"])
+        })
+    })
+    describe('/marker/hour', () => {
+      it('GET - gets all markers from past hour', () => {
+        return request(app)
+          .get("/api/marker/hour")
+          .expect(200)
+          .then(({ body: { marker } }) => {
+            expect(marker).to.be.an('array')
+          });
+      })
+    })
+  })
 });
