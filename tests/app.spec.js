@@ -149,8 +149,9 @@ describe("/api", () => {
         });
     });
   });
-  describe("/pickup", () => {
-    it("GET - gets all data from the database in the correct format", () => {
+
+  describe('/pickup', () => {
+    it.only('GET - gets all data from the database in the correct format, from the last hour', () => {
       return request(app)
         .get("/api/pickup")
         .expect(200)
@@ -176,9 +177,21 @@ describe("/api", () => {
     //         expect(data.length).to.equal(8)
     //       })
     // })
-  });
-  describe("/marker", () => {
-    it("GET - gets all markers from the database in the correct format", () => {
+
+  })
+  describe.only('/pickup/hour', () => {
+    it('GET - gets all pickups from past hour', () => {
+      return request(app)
+        .get("/api/pickup/hour")
+        .expect(200)
+        .then(({ body: { pickup } }) => {
+          expect(pickup).to.be.an('array')
+        });
+    })
+  })
+  describe('/marker', () => {
+    it('GET - gets all markers from the database in the correct format', () => {
+
       return request(app)
         .get("/api/marker")
         .expect(200)
