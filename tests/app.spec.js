@@ -4,18 +4,6 @@ const app = require("../app");
 const request = require("supertest");
 
 describe("/api", () => {
-  // describe('Saving new users', (done) => {
-  //     it('saves a new user to the database', () => {
-  //         const user = new User({
-  //             name:'joanna',
-  //             password:'password123'
-  //         })
-  //         user.save().then(() => {
-  //             expect(user.isNew).to.equal(false)
-  //         done();
-  //         })
-  //     })
-  // })
   describe("/users/login", () => {
     it("Check if user excist in database and confirm by sending user object", () => {
       return request(app)
@@ -38,7 +26,7 @@ describe("/api", () => {
         });
     });
   });
-  describe.only("/users/create_user", () => {
+  describe("/users/create_user", () => {
     it("Posts a new user to the database and returns the user object", () => {
       return request(app)
         .post("/api/users/create_user")
@@ -102,34 +90,53 @@ describe("/api", () => {
         });
     });
   });
-  // describe('delete user', () => {
-  //     beforeEach((done) => {
-  //         const user = new User({
-  //             name:'joanna',
-  //             password:'password123'
-  //         })
-  //         user.save().then(() => {
-  //         done();
-  //         })
-  //     })
-  //     it('deletes user from database', () => {
-  //         User.findOneAndRemove({name:'joanna'}).then(() => {
-  //             User.findOne({name:'joanna'}).then((res) => {
-  //                 expect(res).to.equal(null)
-  //                 done()
-  //             })
-  //         })
-  //     })
-  // })
-  describe.only('/data', () => {
-    it('POST - Saves new data to the database in the correct format', () => {
+  describe('/pickup', () => {
+    it('GET - gets all data from the database in the correct format', () => {
       return request(app)
-        .get("/api/data/")
-        // .send({points:[ {latitude:3.33333, longitude:43.555} , {latitude:3.33333, longitude:43.555} ], type: 'police'})
+        .get("/api/pickup")
         .expect(200)
-        .then(({ body: { data } }) => {
-          console.log(data)
+        .then(({ body: { pickup } }) => {
+          expect(pickup).to.be.an('array')
         });
     });
+    it('POST - saves new data to database', () => {
+      return request(app)
+        .post('/api/pickup')
+        .send({lat:3.33333, long:54.555})
+        .expect(200)
+        .then(({body:{pickup}}) => {
+          expect(pickup._doc.lat).to.eql(3.33333)
+          expect(pickup._doc.long).to.eql(54.555)
+        })
+    })
+    // it.only('accepts a query for a type and returns data for only that type', () => {
+    //     return request(app)
+    //       .get('/api/data?topic=closing')
+    //       .expect(200)
+    //       .then(({body:{data}}) => {
+    //         expect(data.length).to.equal(8)
+    //       })
+    // })
+  })
+  describe.only('/marker', () => {
+    it('GET - gets all markers from the database in the correct format', () => {
+      return request(app)
+        .get("/api/marker")
+        .expect(200)
+        .then(({ body: { marker } }) => {
+          expect(marker).to.be.an('array')
+        });
+    });
+    it('POST - saves new markers to database', () => {
+      return request(app)
+        .post('/api/marker')
+        .send({lat:5.33333, long:43.555, type: 'closing'})
+        .expect(200)
+        .then(({body:{marker}}) => {
+          expect(marker._doc.lat).to.eql(5.33333)
+          expect(marker._doc.long).to.eql(43.555)
+          expect(marker._doc.type).to.eql('closing')
+        })
+    })
   })
 });
