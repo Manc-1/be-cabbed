@@ -90,7 +90,7 @@ describe("/api", () => {
         });
     });
   });
-  describe.only('/pickup', () => {
+  describe('/pickup', () => {
     it('GET - gets all data from the database in the correct format', () => {
       return request(app)
         .get("/api/pickup")
@@ -102,11 +102,11 @@ describe("/api", () => {
     it('POST - saves new data to database', () => {
       return request(app)
         .post('/api/pickup')
-        .send({lat:5.33333, long:35.555})
+        .send({lat:3.33333, long:54.555})
         .expect(200)
         .then(({body:{pickup}}) => {
-          expect(pickup._doc.lat).to.eql(5.33333)
-          expect(pickup._doc.long).to.eql(35.555)
+          expect(pickup._doc.lat).to.eql(3.33333)
+          expect(pickup._doc.long).to.eql(54.555)
         })
     })
     // it.only('accepts a query for a type and returns data for only that type', () => {
@@ -117,5 +117,26 @@ describe("/api", () => {
     //         expect(data.length).to.equal(8)
     //       })
     // })
+  })
+  describe.only('/marker', () => {
+    it('GET - gets all markers from the database in the correct format', () => {
+      return request(app)
+        .get("/api/marker")
+        .expect(200)
+        .then(({ body: { marker } }) => {
+          expect(marker).to.be.an('array')
+        });
+    });
+    it('POST - saves new markers to database', () => {
+      return request(app)
+        .post('/api/marker')
+        .send({lat:5.33333, long:43.555, type: 'closing'})
+        .expect(200)
+        .then(({body:{marker}}) => {
+          expect(marker._doc.lat).to.eql(5.33333)
+          expect(marker._doc.long).to.eql(43.555)
+          expect(marker._doc.type).to.eql('closing')
+        })
+    })
   })
 });
