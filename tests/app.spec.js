@@ -177,9 +177,8 @@ describe("/api", () => {
     });
   });
 
-
-  describe('/pickup', () => {
-    it('GET - gets all data from the database in the correct format, from the last hour', () => {
+  describe("/pickup", () => {
+    it("GET - gets all data from the database in the correct format, from the last hour", () => {
       return request(app)
         .get("/api/pickup")
         .expect(200)
@@ -197,15 +196,39 @@ describe("/api", () => {
           expect(pickup._doc.long).to.eql(54.555);
         });
     });
-  })
-  describe('/pickup/hour', () => {
-    it('GET - gets all pickups from past hour', () => {
+    it("Responds with statuscode 405, and an error message when invalid request methods are used", () => {
+      const invalidMethods = ["patch", "delete", "put"];
+      const methodPromises = invalidMethods.map((method) => {
+        return request(app)
+          [method]("/api/pickup")
+          .expect(405)
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal("Method not allowed");
+          });
+      });
+      return Promise.all(methodPromises);
+    });
+  });
+  describe("/pickup/hour", () => {
+    it("GET - gets all pickups from past hour", () => {
       return request(app)
         .get("/api/pickup/hour")
         .expect(200)
         .then(({ body: { pickup } }) => {
           expect(pickup).to.be.an("array");
         });
+    });
+    it("Responds with statuscode 405, and an error message when invalid request methods are used", () => {
+      const invalidMethods = ["post", "patch", "delete", "put"];
+      const methodPromises = invalidMethods.map((method) => {
+        return request(app)
+          [method]("/api/pickup/hour")
+          .expect(405)
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal("Method not allowed");
+          });
+      });
+      return Promise.all(methodPromises);
     });
   });
   describe("/marker", () => {
@@ -217,27 +240,59 @@ describe("/api", () => {
           expect(marker).to.be.an("array");
         });
     });
-    it.only("POST - saves new markers to database", () => {
+    it("POST - saves new markers to database", () => {
       return request(app)
-        .post('/api/marker')
-        .send({lat:6.35333, long:33.535, type: 'police'})
+        .post("/api/marker")
+        .send({ lat: 6.35333, long: 33.535, type: "police" })
         .expect(200)
-        .then(({body:{marker}}) => {
-          expect(marker._doc.lat).to.eql(6.35333)
-          expect(marker._doc.long).to.eql(33.535)
-          expect(marker._doc.type).to.eql('police')
-          expect(marker._doc).to.have.keys(['_id', 'date', 'time', "__v", "lat", "long","type"])
-        })
-    })
-    describe('/marker/hour', () => {
-      it('GET - gets all markers from past hour', () => {
+        .then(({ body: { marker } }) => {
+          expect(marker._doc.lat).to.eql(6.35333);
+          expect(marker._doc.long).to.eql(33.535);
+          expect(marker._doc.type).to.eql("police");
+          expect(marker._doc).to.have.keys([
+            "_id",
+            "date",
+            "time",
+            "__v",
+            "lat",
+            "long",
+            "type",
+          ]);
+        });
+    });
+    it("Responds with statuscode 405, and an error message when invalid request methods are used", () => {
+      const invalidMethods = ["patch", "delete", "put"];
+      const methodPromises = invalidMethods.map((method) => {
+        return request(app)
+          [method]("/api/marker")
+          .expect(405)
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal("Method not allowed");
+          });
+      });
+      return Promise.all(methodPromises);
+    });
+    describe("/marker/hour", () => {
+      it("GET - gets all markers from past hour", () => {
         return request(app)
           .get("/api/marker/hour")
           .expect(200)
           .then(({ body: { marker } }) => {
-            expect(marker).to.be.an('array')
+            expect(marker).to.be.an("array");
           });
-      })
-    })
-  })
+      });
+      it("Responds with statuscode 405, and an error message when invalid request methods are used", () => {
+        const invalidMethods = ["post", "patch", "delete", "put"];
+        const methodPromises = invalidMethods.map((method) => {
+          return request(app)
+            [method]("/api/marker/hour")
+            .expect(405)
+            .then(({ body: { msg } }) => {
+              expect(msg).to.equal("Method not allowed");
+            });
+        });
+        return Promise.all(methodPromises);
+      });
+    });
+  });
 });

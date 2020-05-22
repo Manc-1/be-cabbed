@@ -1,11 +1,14 @@
 const pickupRouter = require("express").Router();
-const {sendPickup, postPickup, sendPickupFromHour} = require('../controllers/pickup')
+const {
+  sendPickup,
+  postPickup,
+  sendPickupFromHour,
+} = require("../controllers/pickup");
 
-pickupRouter.route('')
-.get(sendPickup)
-.post(postPickup);
+const { send405Error } = require("../errors/index");
 
-pickupRouter.route('/hour')
-.get(sendPickupFromHour);
+pickupRouter.route("").get(sendPickup).post(postPickup).all(send405Error);
+
+pickupRouter.route("/hour").get(sendPickupFromHour).all(send405Error);
 
 module.exports = pickupRouter;
