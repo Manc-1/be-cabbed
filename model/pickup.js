@@ -1,13 +1,13 @@
 const mongoose = require("mongoose");
-const timestamps = require('mongoose-timestamp');
+var moment = require('moment');
 
 const Pickup = new mongoose.Schema({
   lat: Number,
   long: Number,
-  date: Date
+  date: {type: String, default: () => moment().format("dddd, MMMM Do YYYY")},
+  time: {type: String, default: () => moment().format("h:mm:ss a")}
 });
 
-Pickup.plugin(timestamps);
 
 
 module.exports = mongoose.model("pickup", Pickup);
