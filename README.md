@@ -18,7 +18,7 @@ GET /api/
 ## /api/users
 
 ```http
-get /api/users/:_id
+GET /api/user_id/:_id
 ```
 
 ```http
@@ -29,12 +29,30 @@ POST /api/users/login
 POST /api/users/create_user
 ```
 
-## /api/articles
+## /api/pickup
 
 ```http
-GET /api/data/
+GET /api/pickup/
 ```
 
 ```http
 POST /api/data
+```
+
+```http
+GET /api/pickup/hour/
+```
+
+## /api/marker
+
+```http
+GET /api/marker/
+```
+
+```http
+POST /api/marker
+```
+
+```http
+GET /api/marker/hour/
 ```
