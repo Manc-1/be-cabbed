@@ -192,8 +192,8 @@ describe("/api", () => {
         .send({ lat: 3.33333, long: 54.555 })
         .expect(200)
         .then(({ body: { pickup } }) => {
-          expect(pickup._doc.lat).to.eql(3.33333);
-          expect(pickup._doc.long).to.eql(54.555);
+          expect(pickup.lat).to.eql(3.33333);
+          expect(pickup.long).to.eql(54.555);
         });
     });
     it("Responds with statuscode 405, and an error message when invalid request methods are used", () => {
@@ -240,16 +240,16 @@ describe("/api", () => {
           expect(marker).to.be.an("array");
         });
     });
-    it("POST - saves new markers to database", () => {
+    it.only("POST - saves new markers to database", () => {
       return request(app)
         .post("/api/marker")
         .send({ lat: 6.35333, long: 33.535, type: "police" })
         .expect(200)
         .then(({ body: { marker } }) => {
-          expect(marker._doc.lat).to.eql(6.35333);
-          expect(marker._doc.long).to.eql(33.535);
-          expect(marker._doc.type).to.eql("police");
-          expect(marker._doc).to.have.keys([
+          expect(marker.lat).to.eql(6.35333);
+          expect(marker.long).to.eql(33.535);
+          expect(marker.type).to.eql("police");
+          expect(marker).to.have.keys([
             "_id",
             "date",
             "time",
