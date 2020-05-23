@@ -54,7 +54,7 @@ exports.postMarker = async (req, res, next) => {
       time,
     });
     await newMarker.save();
-    res.status(200).send({ marker: { ...newMarker } });
+    res.status(200).send({ marker: { ...newMarker._doc } });
   } catch (err) {
     res.send("error");
   }
