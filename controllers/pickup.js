@@ -59,7 +59,7 @@ exports.postPickup = async (req, res, next) => {
       long,
     });
     await newPickup.save();
-    res.status(200).send({ pickup: { ...newPickup } });
+    res.status(200).send({ pickup: { ...newPickup._doc } });
   } catch (err) {
     res.send("error");
   }
