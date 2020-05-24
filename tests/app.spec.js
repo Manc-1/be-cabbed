@@ -231,7 +231,7 @@ describe("/api", () => {
       return Promise.all(methodPromises);
     });
   });
-  describe("/marker", () => {
+  describe.only("/marker", () => {
     it("GET - gets all markers from the database in the correct format", () => {
       return request(app)
         .get("/api/marker")
@@ -240,7 +240,7 @@ describe("/api", () => {
           expect(marker).to.be.an("array");
         });
     });
-    it.only("POST - saves new markers to database", () => {
+    it("POST - saves new markers to database", () => {
       return request(app)
         .post("/api/marker")
         .send({ lat: 6.35333, long: 33.535, type: "police" })
@@ -258,6 +258,24 @@ describe("/api", () => {
             "long",
             "type",
           ]);
+        });
+    });
+    it("POST - Returns error message when requiered key is not submitted", () => {
+      return request(app)
+        .post("/api/marker")
+        .send({ lat: 6.35333, long: 33.535, typez: "police" })
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).to.eql("Bad request");
+        });
+    });
+    it("POST - Returns error message when requiered value is not submitted in correct format", () => {
+      return request(app)
+        .post("/api/marker")
+        .send({ lat: 6.35333, long: "av", type: "police" })
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).to.eql("Bad request");
         });
     });
     it("Responds with statuscode 405, and an error message when invalid request methods are used", () => {
