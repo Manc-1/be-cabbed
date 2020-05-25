@@ -61,6 +61,6 @@ exports.postPickup = async (req, res, next) => {
     await newPickup.save();
     res.status(200).send({ pickup: { ...newPickup._doc } });
   } catch (err) {
-    res.send("error");
+    res.status(400).send({ msg: "Bad Request" });
   }
 };
