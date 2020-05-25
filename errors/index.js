@@ -16,5 +16,5 @@ exports.handle500s = (err, req, res, next) => {
 };
 
 exports.handleInvalidPaths = (req, res, next) => {
-  res.status(404).send({ msg: "Path not found." });
+  res.status(404).send({ msg: "Path not found" });
 };
