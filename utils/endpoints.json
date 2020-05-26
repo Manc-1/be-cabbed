@@ -53,18 +53,18 @@
       "pickup": [
         {
           "_id": "5ec6a4f7db564d1e02766056",
-          "lat": 5.33333,
-          "long": 35.555,
+          "latitude": 5.33333,
+          "longitude": 35.555,
           "date": "Thursday, May 21st 2020",
-          "time": "4:57:43 pm",
+          "time": "4:57:43",
           "__v": 0
         },
         {
           "_id": "5ec6a6030a10311ef87f95af",
-          "lat": 4.33333,
-          "long": 34.555,
+          "latitude": 4.33333,
+          "longitude": 34.555,
           "date": "Thursday, May 21st 2020",
-          "time": "5:02:11 pm",
+          "time": "5:02:11",
           "__v": 0
         }
       ]
@@ -75,10 +75,10 @@
     "queries": [],
     "exampleResponse": {
       "_id": "5ec91772bb8b141aad408715",
-      "lat": 3.33333,
-      "long": 54.555,
+      "latitude": 3.33333,
+      "longitude": 54.555,
       "date": "Saturday, May 23rd 2020",
-      "time": "1:30:42 pm",
+      "time": "1:30:42",
       "__v": 0
     }
   },
@@ -89,18 +89,42 @@
       "pickup": [
         {
           "_id": "5ec6a4f7db564d1e02766056",
-          "lat": 5.33333,
-          "long": 35.555,
+          "latitude": 5.33333,
+          "longitude": 35.555,
           "date": "Thursday, May 21st 2020",
-          "time": "4:57:43 pm",
+          "time": "4:57:43",
           "__v": 0
         },
         {
           "_id": "5ec6a6030a10311ef87f95af",
-          "lat": 4.33333,
-          "long": 34.555,
+          "latitude": 4.33333,
+          "longitude": 34.555,
           "date": "Thursday, May 21st 2020",
-          "time": "5:02:11 pm",
+          "time": "5:02:11",
+          "__v": 0
+        }
+      ]
+    }
+  },
+  "GET /pickup/pasthour": {
+    "description": "Gets all pickup data within an hour for the past 4 weeks from the database based on the get requests timestamp",
+    "queries": [],
+    "exampleResponse": {
+      "pickup": [
+        {
+          "_id": "5ec6a4f7db564d1e02766056",
+          "latitude": 5.33333,
+          "longitude": 35.555,
+          "date": "Thursday, May 21st 2020",
+          "time": "4:57:43",
+          "__v": 0
+        },
+        {
+          "_id": "5ec6a6030a10311ef87f95af",
+          "latitude": 4.33333,
+          "longitude": 34.555,
+          "date": "Thursday, May 14st 2020",
+          "time": "5:02:11",
           "__v": 0
         }
       ]
@@ -113,11 +137,11 @@
       "marker": [
         {
           "_id": "5ec7832b86330945cb92bdb8",
-          "lat": 3.33333,
-          "long": 54.555,
+          "latitude": 3.33333,
+          "longitude": 54.555,
           "type": "police",
           "date": "Friday, May 22nd 2020",
-          "time": "8:45:47 am",
+          "time": "8:45:47",
           "__v": 0
         }
       ]
@@ -128,11 +152,11 @@
     "queries": [],
     "exampleResponse": {
       "_id": "5ec91b6fbb8b141aad408716",
-      "lat": 6.35333,
-      "long": 33.535,
+      "latitude": 6.35333,
+      "longitude": 33.535,
       "type": "police",
       "date": "Saturday, May 23rd 2020",
-      "time": "1:47:43 pm",
+      "time": "1:47:43",
       "__v": 0
     }
   },
@@ -143,11 +167,11 @@
       "marker": [
         {
           "_id": "5ec7832b86330945cb92bdb8",
-          "lat": 3.33333,
-          "long": 54.555,
+          "latitude": 3.33333,
+          "longitude": 54.555,
           "type": "police",
           "date": "Friday, May 22nd 2020",
-          "time": "8:45:47 am",
+          "time": "8:45:47",
           "__v": 0
         }
       ]
