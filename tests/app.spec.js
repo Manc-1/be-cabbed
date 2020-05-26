@@ -244,18 +244,21 @@ describe("/api", () => {
         .get("/api/pickup/hour")
         .expect(200)
         .then(({ body: { pickup } }) => {
-          console.log(pickup)
           expect(pickup).to.be.an("array");
           pickup.forEach((obj) => {
-            const myDate = new Date(Date.now());
-            const myDateStart = new Date(Date.now() - 1 * 60 * 60 * 1000);
-            const myTime = moment(myDate).format("h:mm:ss");
-            const myTimeStart = moment(myDateStart).format("h:mm:ss");
-            console.log(obj.time)
-            console.log(myTime, 'mytime')
-            console.log(myTimeStart, 'mytimestart')
-            expect(obj.time).to.be.greaterThan(myTimeStart.toString())
-            expect(obj.time).to.be.lessThan(myTime.toString())
+            const myTime = moment(new Date(Date.now())).format("h:mm:ss");
+            const myTimeStart = moment(new Date(Date.now() - 1 * 60 * 60 * 1000)).format("h:mm:ss");
+            const {time} = obj
+            const isBetween = moment(time, "h:mm:ss").isBetween(moment(myTimeStart, "h:mm:ss"), moment(myTime, "h:mm:ss"))
+            expect(isBetween).to.be.equal(true)
+            expect(obj).to.have.keys([
+              "_id",
+              "date",
+              "time",
+              "latitude",
+              "longitude",
+              "__v",
+            ]);
           })
         });
     });
