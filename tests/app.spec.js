@@ -337,7 +337,7 @@ describe("/api", () => {
       });
       return Promise.all(methodPromises);
     });
-    describe("/marker/hour", () => {
+    describe.only("/marker/hour", () => {
       it("GET - gets all markers from past hour", () => {
         return request(app)
           .get("/api/marker/hour")
