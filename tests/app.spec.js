@@ -157,18 +157,30 @@ describe("/api", () => {
         .expect(200)
         .then(({ body: { pickup } }) => {
           expect(pickup).to.be.an("array");
+          pickup.forEach(obj => {
+            expect(obj).to.have.keys(['_id', 'date', 'time', "latitude", "longitude", "__v"])
+          })
         });
     });
     it("POST - saves new data to database", () => {
       return request(app)
         .post("/api/pickup")
-        .send({ lat: 3.33333, long: 54.555 })
+        .send({ latitude: 3.33333, longitude: 54.555 })
         .expect(200)
         .then(({ body: { pickup } }) => {
-          expect(pickup._doc.lat).to.eql(3.33333);
-          expect(pickup._doc.long).to.eql(54.555);
+          expect(pickup._doc.latitude).to.eql(3.33333);
+          expect(pickup._doc.longitude).to.eql(54.555);
+          expect(pickup._doc).to.have.keys(['_id', 'date', 'time', "latitude", "longitude", "__v"])
         });
     });
+    // it('404 not found for invalid path', () => {
+    //   return request(app)
+    //     .get('/api/pickup')
+    //     .expect(404)
+    //     .then(({body: {msg}}) => {
+    //       expect(msg).to.equal('Path Not Found')
+    //     })
+    // })
   })
   describe('/pickup/hour', () => {
     it('GET - gets all pickups from past hour', () => {
@@ -181,25 +193,27 @@ describe("/api", () => {
     })
   })
   describe('/marker', () => {
-    it('GET - gets all markers from the database in the correct format', () => {
-
+    it('GET - gets all markers from the database in the correct format', () => { 
       return request(app)
         .get("/api/marker")
         .expect(200)
         .then(({ body: { marker } }) => {
           expect(marker).to.be.an("array");
+          marker.forEach(obj => {
+            expect(obj).to.have.keys(['_id', 'date', 'time', "__v", "latitude", "longitude", 'type'])
+          })
         });
     });
-    it.only("POST - saves new markers to database", () => {
+    it("POST - saves new markers to database", () => {
       return request(app)
         .post('/api/marker')
-        .send({lat:6.35333, long:33.535, type: 'police'})
+        .send({latitude:6.35333, longitude:33.535, type: 'police'})
         .expect(200)
         .then(({body:{marker}}) => {
-          expect(marker._doc.lat).to.eql(6.35333)
-          expect(marker._doc.long).to.eql(33.535)
+          expect(marker._doc.latitude).to.eql(6.35333)
+          expect(marker._doc.longitude).to.eql(33.535)
           expect(marker._doc.type).to.eql('police')
-          expect(marker._doc).to.have.keys(['_id', 'date', 'time', "__v", "lat", "long","type"])
+          expect(marker._doc).to.have.keys(['_id', 'date', 'time', "__v", "latitude", "longitude","type"])
         })
     })
     describe('/marker/hour', () => {
@@ -214,3 +228,5 @@ describe("/api", () => {
     })
   })
 });
+
+
