@@ -9,3 +9,4 @@ markerRouter.route('/hour')
 .get(sendMarkerFromHour)
 
 module.exports = markerRouter;
+
