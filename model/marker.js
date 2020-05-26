@@ -6,7 +6,7 @@ const Marker = new mongoose.Schema({
   longitude: { type: Number, required: true },
   type: { type: String, required: true },
   date: { type: String, default: () => moment().format("dddd, MMMM Do YYYY") },
-  time: { type: String, default: () => moment().format("h:mm:ss a") },
+  time: { type: String, default: () => moment().format("h:mm:ss") },
 });
 
 module.exports = mongoose.model("marker", Marker);

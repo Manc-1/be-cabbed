@@ -15,8 +15,8 @@ exports.sendMarker = (req, res, next) => {
 exports.sendMarkerFromHour = (req, res, next) => {
   const myDate = new Date(Date.now());
   const myDateStart = new Date(Date.now() - 1 * 60 * 60 * 1000);
-  const myTime = moment(myDate).format("h:mm:ss a");
-  const myTimeStart = moment(myDateStart).format("h:mm:ss a");
+  const myTime = moment(myDate).format("h:mm:ss");
+  const myTimeStart = moment(myDateStart).format("h:mm:ss");
   Marker.find({ time: { $gte: myTimeStart, $lte: myTime } }, function (
     err,
     marker
