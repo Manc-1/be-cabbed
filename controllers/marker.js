@@ -29,6 +29,7 @@ exports.sendMarkerFromHour = (req, res, next) => {
   });
 };
 
+
 // exports.sendMarkerFromPastHour = (req, res, next) => {
 //   const myDate = new Date(Date.now())
 //   const myDateStart = new Date(Date.now() - 1 * 60 * 60 * 1000)
@@ -44,11 +45,11 @@ exports.sendMarkerFromHour = (req, res, next) => {
 // }
 
 exports.postMarker = async (req, res, next) => {
-  const { lat, long, type, date, time } = req.body;
+  const { latitude, longitude, type, date, time } = req.body;
   try {
     const newMarker = new Marker({
-      lat,
-      long,
+      latitude,
+      longitude,
       type,
       date,
       time,
@@ -59,3 +60,4 @@ exports.postMarker = async (req, res, next) => {
     res.status(400).send({ msg: "Bad request" });
   }
 };
+

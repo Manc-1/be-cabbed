@@ -12,3 +12,4 @@ markerRouter.route("").get(sendMarker).post(postMarker).all(send405Error);
 markerRouter.route("/hour").get(sendMarkerFromHour).all(send405Error);
 
 module.exports = markerRouter;
+

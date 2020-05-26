@@ -52,11 +52,11 @@ exports.sendPickupFromPastHours = (req, res, next) => {
 };
 
 exports.postPickup = async (req, res, next) => {
-  const { lat, long } = req.body;
+  const { latitude, longitude } = req.body;
   try {
     const newPickup = new Pickup({
-      lat,
-      long,
+      latitude,
+      longitude,
     });
     await newPickup.save();
     res.status(200).send({ pickup: { ...newPickup._doc } });
@@ -64,3 +64,4 @@ exports.postPickup = async (req, res, next) => {
     res.status(400).send({ msg: "Bad Request" });
   }
 };
+

@@ -184,16 +184,19 @@ describe("/api", () => {
         .expect(200)
         .then(({ body: { pickup } }) => {
           expect(pickup).to.be.an("array");
+          pickup.forEach(obj => {
+            expect(obj).to.have.keys(['_id', 'date', 'time', "latitude", "longitude", "__v"])
+          })
         });
     });
     it("POST - saves new data to database", () => {
       return request(app)
         .post("/api/pickup")
-        .send({ lat: 3.33333, long: 54.555 })
+        .send({ latitude: 3.33333, longitude: 54.555 })
         .expect(200)
         .then(({ body: { pickup } }) => {
-          expect(pickup.lat).to.eql(3.33333);
-          expect(pickup.long).to.eql(54.555);
+          expect(pickup.latitude).to.eql(3.33333);
+          expect(pickup.longitude).to.eql(54.555);
         });
     });
     it("POST - Returns a 400 error message when required keys are not in post request", () => {
@@ -264,24 +267,27 @@ describe("/api", () => {
         .expect(200)
         .then(({ body: { marker } }) => {
           expect(marker).to.be.an("array");
+          marker.forEach(obj => {
+            expect(obj).to.have.keys(['_id', 'date', 'time', "__v", "latitude", "longitude", 'type'])
+          })
         });
     });
     it("POST - saves new markers to database", () => {
       return request(app)
         .post("/api/marker")
-        .send({ lat: 6.35333, long: 33.535, type: "police" })
+        .send({ latitude: 6.35333, longitude: 33.535, type: "police" })
         .expect(200)
         .then(({ body: { marker } }) => {
-          expect(marker.lat).to.eql(6.35333);
-          expect(marker.long).to.eql(33.535);
+          expect(marker.latitude).to.eql(6.35333);
+          expect(marker.longitude).to.eql(33.535);
           expect(marker.type).to.eql("police");
           expect(marker).to.have.keys([
             "_id",
             "date",
             "time",
             "__v",
-            "lat",
-            "long",
+            "latitude",
+            "longitude",
             "type",
           ]);
         });
@@ -340,3 +346,5 @@ describe("/api", () => {
     });
   });
 });
+
+
