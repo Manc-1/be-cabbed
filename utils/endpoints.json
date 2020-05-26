@@ -32,7 +32,7 @@
       }
     }
   },
-  "POST /api/user/create_user": {
+  "POST /api/users/create_user": {
     "description": "serves an object with the created user details",
     "queries": [],
     "exampleResponse": {
