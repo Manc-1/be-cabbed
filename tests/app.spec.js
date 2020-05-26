@@ -230,7 +230,7 @@ describe("/api", () => {
       return Promise.all(methodPromises);
     });
   });
-  describe.only("/pickup/hour", () => {
+  describe("/pickup/hour", () => {
     it("GET - gets all pickups from past hour", () => {
       return request(app)
         .get("/api/pickup/hour")
@@ -322,7 +322,7 @@ describe("/api", () => {
       });
       return Promise.all(methodPromises);
     });
-    describe("/marker/hour", () => {
+    describe.only("/marker/hour", () => {
       it("GET - gets all markers from past hour", () => {
         return request(app)
           .get("/api/marker/hour")
