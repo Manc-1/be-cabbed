@@ -17,7 +17,7 @@
       }
     }
   },
-  "POST /api/user/login": {
+  "POST /api/users/login": {
     "description": "serves an object with the logged in users details",
     "queries": [],
     "exampleResponse": {
