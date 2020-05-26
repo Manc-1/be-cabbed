@@ -29,49 +29,33 @@ exports.sendMarkerFromHour = (req, res, next) => {
   });
 };
 
-  exports.sendMarkerFromPastHour = (req, res, next) => {
-    const myDate = new Date(Date.now())
-    const myDateStart = new Date(Date.now() - 1 * 60 * 60 * 1000)
-    const myTime = moment(myDate).format("h:mm:ss a")
-    const myTimeStart = moment(myDateStart).format("h:mm:ss a")
-    Marker.find({ $or: [{ time: { $gte: myTimeStart, $lte: myTime } }, { time: { $gte: myTimeStart - 1week, $lte: myTime - 1week } }] }, function(err, marker) {
-        if (err) {
-          res.send(err);
-        } else {
-          res.status(200).send({marker});
-        }
-      })
-  }
+// exports.sendMarkerFromPastHour = (req, res, next) => {
+//   const myDate = new Date(Date.now())
+//   const myDateStart = new Date(Date.now() - 1 * 60 * 60 * 1000)
+//   const myTime = moment(myDate).format("h:mm:ss a")
+//   const myTimeStart = moment(myDateStart).format("h:mm:ss a")
+//   Marker.find({ $or: [{ time: { $gte: myTimeStart, $lte: myTime } }, { time: { $gte: myTimeStart - 1week, $lte: myTime - 1week } }] }, function(err, marker) {
+//       if (err) {
+//         res.send(err);
+//       } else {
+//         res.status(200).send({marker});
+//       }
+//     })
+// }
 
 exports.postMarker = async (req, res, next) => {
-<<<<<<< HEAD
-  const { lat, long, type } = req.body;
+  const { lat, long, type, date, time } = req.body;
   try {
     const newMarker = new Marker({
       lat,
       long,
       type,
+      date,
+      time,
     });
     await newMarker.save();
-    res.status(200).send({ marker: { ...newMarker } });
+    res.status(200).send({ marker: { ...newMarker._doc } });
   } catch (err) {
-    res.send("error");
+    res.status(400).send({ msg: "Bad request" });
   }
 };
-=======
-    const { lat, long, type, date, time } = req.body;
-    try {
-        const newMarker = new Marker({
-            lat, 
-            long,
-            type,
-            date, 
-            time,
-        })
-        await newMarker.save();
-        res.status(200).send({marker: {...newMarker}})
-    } catch(err){
-        res.send('error')
-    }
-}
->>>>>>> b82e4febea66b959e6d231b9deede4a00f164cef
