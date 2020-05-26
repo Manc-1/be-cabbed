@@ -12,6 +12,7 @@ pickupRouter.route("").get(sendPickup).post(postPickup).all(send405Error);
 
 pickupRouter.route("/hour").get(sendPickupFromHour).all(send405Error);
 
-pickupRouter.route('/pasthour').get(sendPickupFromPastHours)
+pickupRouter.route('/pasthour').get(sendPickupFromPastHours).all(send405Error);
+
 
 module.exports = pickupRouter;
