@@ -118,8 +118,8 @@ describe("/api", () => {
             "https://www.oneworldplayproject.com/wp-content/uploads/2016/03/avatar-1024x1024.jpg",
         })
         .expect(400)
-        .then(({ text }) => {
-          expect(text).to.eql("E-mail adress is already taken");
+        .then(({ body: { msg } }) => {
+          expect(msg).to.eql("E-mail adress is already in the Database");
         });
     });
     it("Returns a 400 error message when any required fields are missing", () => {
@@ -133,8 +133,8 @@ describe("/api", () => {
             "https://www.oneworldplayproject.com/wp-content/uploads/2016/03/avatar-1024x1024.jpg",
         })
         .expect(400)
-        .then(({ text }) => {
-          expect(text).to.eql("Error while processing user entry to database");
+        .then(({ body: { msg } }) => {
+          expect(msg).to.eql("Error while processing user entry to database");
         });
     });
     it("Responds with statuscode 405, and an error message when invalid request methods are used", () => {
@@ -171,8 +171,8 @@ describe("/api", () => {
       return request(app)
         .get("/api/users/user_id/5ec4f809549d6c5123c50a123INVALID")
         .expect(404)
-        .then(({ text }) => {
-          expect(text).to.equal("Id not found");
+        .then(({ body: { msg } }) => {
+          expect(msg).to.equal("Id not found");
         });
     });
   });
@@ -184,9 +184,16 @@ describe("/api", () => {
         .expect(200)
         .then(({ body: { pickup } }) => {
           expect(pickup).to.be.an("array");
-          pickup.forEach(obj => {
-            expect(obj).to.have.keys(['_id', 'date', 'time', "latitude", "longitude", "__v"])
-          })
+          pickup.forEach((obj) => {
+            expect(obj).to.have.keys([
+              "_id",
+              "date",
+              "time",
+              "latitude",
+              "longitude",
+              "__v",
+            ]);
+          });
         });
     });
     it("POST - saves new data to database", () => {
@@ -267,9 +274,17 @@ describe("/api", () => {
         .expect(200)
         .then(({ body: { marker } }) => {
           expect(marker).to.be.an("array");
-          marker.forEach(obj => {
-            expect(obj).to.have.keys(['_id', 'date', 'time', "__v", "latitude", "longitude", 'type'])
-          })
+          marker.forEach((obj) => {
+            expect(obj).to.have.keys([
+              "_id",
+              "date",
+              "time",
+              "__v",
+              "latitude",
+              "longitude",
+              "type",
+            ]);
+          });
         });
     });
     it("POST - saves new markers to database", () => {
@@ -346,5 +361,3 @@ describe("/api", () => {
     });
   });
 });
-
-
