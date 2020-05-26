@@ -32,7 +32,7 @@ POST /api/users/create_user
 ## /api/pickup
 
 ```http
-GET /api/pickup/
+GET /api/pickup
 ```
 
 ```http
@@ -40,13 +40,17 @@ POST /api/data
 ```
 
 ```http
-GET /api/pickup/hour/
+GET /api/pickup/hour
+```
+
+```http
+GET /api/pickup/pasthour
 ```
 
 ## /api/marker
 
 ```http
-GET /api/marker/
+GET /api/marker
 ```
 
 ```http
@@ -54,5 +58,5 @@ POST /api/marker
 ```
 
 ```http
-GET /api/marker/hour/
+GET /api/marker/hour
 ```
