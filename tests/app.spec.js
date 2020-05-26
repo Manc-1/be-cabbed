@@ -122,6 +122,33 @@ describe("/api", () => {
           expect(text).to.eql("E-mail adress is already taken");
         });
     });
+    it("Returns a 400 error message when any required fields are missing", () => {
+      return request(app)
+        .post("/api/users/create_user")
+        .send({
+          name: "Niels",
+          email: "Testasdas2@testing.com",
+          phoneNumber: "077888888",
+          userAvatar:
+            "https://www.oneworldplayproject.com/wp-content/uploads/2016/03/avatar-1024x1024.jpg",
+        })
+        .expect(400)
+        .then(({ text }) => {
+          expect(text).to.eql("Error while processing user entry to database");
+        });
+    });
+    it("Responds with statuscode 405, and an error message when invalid request methods are used", () => {
+      const invalidMethods = ["get", "patch", "delete", "put"];
+      const methodPromises = invalidMethods.map((method) => {
+        return request(app)
+          [method]("/api/users/create_user")
+          .expect(405)
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal("Method not allowed");
+          });
+      });
+      return Promise.all(methodPromises);
+    });
   });
   describe("/users/user_id/:_id", () => {
     it("finds one user by id from the database", () => {
@@ -150,8 +177,8 @@ describe("/api", () => {
     });
   });
 
-  describe('/pickup', () => {
-    it('GET - gets all data from the database in the correct format, from the last hour', () => {
+  describe("/pickup", () => {
+    it("GET - gets all data from the database in the correct format, from the last hour", () => {
       return request(app)
         .get("/api/pickup")
         .expect(200)
@@ -168,32 +195,73 @@ describe("/api", () => {
         .send({ latitude: 3.33333, longitude: 54.555 })
         .expect(200)
         .then(({ body: { pickup } }) => {
-          expect(pickup._doc.latitude).to.eql(3.33333);
-          expect(pickup._doc.longitude).to.eql(54.555);
-          expect(pickup._doc).to.have.keys(['_id', 'date', 'time', "latitude", "longitude", "__v"])
+          expect(pickup.latitude).to.eql(3.33333);
+          expect(pickup.longitude).to.eql(54.555);
         });
     });
-    // it('404 not found for invalid path', () => {
-    //   return request(app)
-    //     .get('/api/pickup')
-    //     .expect(404)
-    //     .then(({body: {msg}}) => {
-    //       expect(msg).to.equal('Path Not Found')
-    //     })
-    // })
-  })
-  describe('/pickup/hour', () => {
-    it('GET - gets all pickups from past hour', () => {
+    it("POST - Returns a 400 error message when required keys are not in post request", () => {
+      return request(app)
+        .post("/api/pickup")
+        .send({ lab: 3.33333, long: 54.555 })
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).to.eql("Bad Request");
+        });
+    });
+    it("POST - Returns error message when requiered value is not submitted in correct format", () => {
+      return request(app)
+        .post("/api/pickup")
+        .send({ lat: "testingtest", long: 54.555 })
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).to.eql("Bad Request");
+        });
+    });
+    it("Responds with statuscode 405, and an error message when invalid request methods are used", () => {
+      const invalidMethods = ["patch", "delete", "put"];
+      const methodPromises = invalidMethods.map((method) => {
+        return request(app)
+          [method]("/api/pickup")
+          .expect(405)
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal("Method not allowed");
+          });
+      });
+      return Promise.all(methodPromises);
+    });
+  });
+  describe.only("/pickup/hour", () => {
+    it("GET - gets all pickups from past hour", () => {
       return request(app)
         .get("/api/pickup/hour")
         .expect(200)
         .then(({ body: { pickup } }) => {
-          expect(pickup).to.be.an('array')
+          expect(pickup).to.be.an("array");
         });
-    })
-  })
-  describe('/marker', () => {
-    it('GET - gets all markers from the database in the correct format', () => { 
+    });
+    it("GET - responds with a 404 when the path is incorrect", () => {
+      return request(app)
+        .get("/api/pickup/hourz")
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).to.equal("Path not found");
+        });
+    });
+    it("Responds with statuscode 405, and an error message when invalid request methods are used", () => {
+      const invalidMethods = ["post", "patch", "delete", "put"];
+      const methodPromises = invalidMethods.map((method) => {
+        return request(app)
+          [method]("/api/pickup/hour")
+          .expect(405)
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal("Method not allowed");
+          });
+      });
+      return Promise.all(methodPromises);
+    });
+  });
+  describe("/marker", () => {
+    it("GET - gets all markers from the database in the correct format", () => {
       return request(app)
         .get("/api/marker")
         .expect(200)
@@ -206,27 +274,77 @@ describe("/api", () => {
     });
     it("POST - saves new markers to database", () => {
       return request(app)
-        .post('/api/marker')
-        .send({latitude:6.35333, longitude:33.535, type: 'police'})
+        .post("/api/marker")
+        .send({ latitude: 6.35333, longitude: 33.535, type: "police" })
         .expect(200)
-        .then(({body:{marker}}) => {
-          expect(marker._doc.latitude).to.eql(6.35333)
-          expect(marker._doc.longitude).to.eql(33.535)
-          expect(marker._doc.type).to.eql('police')
-          expect(marker._doc).to.have.keys(['_id', 'date', 'time', "__v", "latitude", "longitude","type"])
-        })
-    })
-    describe('/marker/hour', () => {
-      it('GET - gets all markers from past hour', () => {
+        .then(({ body: { marker } }) => {
+          expect(marker.latitude).to.eql(6.35333);
+          expect(marker.longitude).to.eql(33.535);
+          expect(marker.type).to.eql("police");
+          expect(marker).to.have.keys([
+            "_id",
+            "date",
+            "time",
+            "__v",
+            "latitude",
+            "longitude",
+            "type",
+          ]);
+        });
+    });
+    it("POST - Returns a 400 error message when required keys are not in post request", () => {
+      return request(app)
+        .post("/api/marker")
+        .send({ lat: 6.35333, long: 33.535, typez: "police" })
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).to.eql("Bad request");
+        });
+    });
+    it("POST - Returns error message when requiered value is not submitted in correct format", () => {
+      return request(app)
+        .post("/api/marker")
+        .send({ lat: 6.35333, long: "av", type: "police" })
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).to.eql("Bad request");
+        });
+    });
+    it("Responds with statuscode 405, and an error message when invalid request methods are used", () => {
+      const invalidMethods = ["patch", "delete", "put"];
+      const methodPromises = invalidMethods.map((method) => {
+        return request(app)
+          [method]("/api/marker")
+          .expect(405)
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal("Method not allowed");
+          });
+      });
+      return Promise.all(methodPromises);
+    });
+    describe("/marker/hour", () => {
+      it("GET - gets all markers from past hour", () => {
         return request(app)
           .get("/api/marker/hour")
           .expect(200)
           .then(({ body: { marker } }) => {
-            expect(marker).to.be.an('array')
+            expect(marker).to.be.an("array");
           });
-      })
-    })
-  })
+      });
+      it("Responds with statuscode 405, and an error message when invalid request methods are used", () => {
+        const invalidMethods = ["post", "patch", "delete", "put"];
+        const methodPromises = invalidMethods.map((method) => {
+          return request(app)
+            [method]("/api/marker/hour")
+            .expect(405)
+            .then(({ body: { msg } }) => {
+              expect(msg).to.equal("Method not allowed");
+            });
+        });
+        return Promise.all(methodPromises);
+      });
+    });
+  });
 });
 
 

@@ -1,7 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const apiRouter = require("./routes/apiRouter");
-
 const connection = require("./connection");
 
 const {
@@ -9,8 +8,6 @@ const {
   handle500s,
   handleInvalidPaths,
 } = require("./errors");
-
-const User = require("./model/user");
 
 const app = express();
 
