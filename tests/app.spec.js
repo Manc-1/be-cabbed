@@ -2,6 +2,7 @@ const { expect } = require("chai");
 const User = require("../model/user");
 const app = require("../app");
 const request = require("supertest");
+const moment = require("moment");
 
 describe("/api", () => {
   describe("/users/login", () => {
@@ -238,13 +239,24 @@ describe("/api", () => {
     });
   });
   describe("/pickup/hour", () => {
-    it("GET - gets all pickups from past hour", () => {
+    it.only("GET - gets all pickups from past hour", () => {
       return request(app)
         .get("/api/pickup/hour")
         .expect(200)
         .then(({ body: { pickup } }) => {
           console.log(pickup)
           expect(pickup).to.be.an("array");
+          pickup.forEach((obj) => {
+            const myDate = new Date(Date.now());
+            const myDateStart = new Date(Date.now() - 1 * 60 * 60 * 1000);
+            const myTime = moment(myDate).format("h:mm:ss");
+            const myTimeStart = moment(myDateStart).format("h:mm:ss");
+            console.log(obj.time)
+            console.log(myTime, 'mytime')
+            console.log(myTimeStart, 'mytimestart')
+            expect(obj.time).to.be.greaterThan(myTimeStart.toString())
+            expect(obj.time).to.be.lessThan(myTime.toString())
+          })
         });
     });
     it("GET - responds with a 404 when the path is incorrect", () => {
@@ -268,6 +280,16 @@ describe("/api", () => {
       return Promise.all(methodPromises);
     });
   });
+  describe('/pickup/pasthour', () => {
+    it('GET', () => {
+      return request(app)
+        .get('/api/pickup/pasthour')
+        .expect(200)
+        .then(({body: {pickup}}) => {
+          expect(pickup).to.be.an('array')
+        })
+    })
+  })
   describe("/marker", () => {
     it("GET - gets all markers from the database in the correct format", () => {
       return request(app)
@@ -345,6 +367,9 @@ describe("/api", () => {
           .expect(200)
           .then(({ body: { marker } }) => {
             expect(marker).to.be.an("array");
+            marker.forEach((obj) => {
+              expect(obj.time).to
+            })
           });
       });
       it("Responds with statuscode 405, and an error message when invalid request methods are used", () => {
