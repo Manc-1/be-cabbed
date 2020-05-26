@@ -45,7 +45,8 @@ const randomGeoPoints = (centrePoint, radius, positionCount, startDate, endDate 
        
     return { latitude: lat, longitude: long, 
         date:moment(randomDate).format("dddd, MMMM Do YYYY"), 
-        time:moment(randomDate).format("h:mm:ss a")
+        time:moment(randomDate).format("h:mm:ss a"),
+        __v: 0
   };
   };
   
