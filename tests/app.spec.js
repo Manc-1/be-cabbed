@@ -177,7 +177,6 @@ describe("/api", () => {
         });
     });
   });
-
   describe("/pickup", () => {
     it("GET - gets all data from the database in the correct format, from the last hour", () => {
       return request(app)
@@ -197,7 +196,7 @@ describe("/api", () => {
           });
         });
     });
-    it("POST - saves new data to database", () => {
+    xit("POST - saves new data to database", () => {
       return request(app)
         .post("/api/pickup")
         .send({ latitude: 3.33333, longitude: 54.555 })
@@ -239,7 +238,7 @@ describe("/api", () => {
     });
   });
   describe("/pickup/hour", () => {
-    it.only("GET - gets all pickups from past hour", () => {
+    it("GET - gets all pickups from past hour", () => {
       return request(app)
         .get("/api/pickup/hour")
         .expect(200)
@@ -283,15 +282,42 @@ describe("/api", () => {
       return Promise.all(methodPromises);
     });
   });
-  describe('/pickup/pasthour', () => {
-    it('GET', () => {
+  describe('/pasthour', () => {
+    it('GET all data for the past hour for the past 4 weeks', () => {
       return request(app)
         .get('/api/pickup/pasthour')
         .expect(200)
         .then(({body: {pickup}}) => {
           expect(pickup).to.be.an('array')
+          pickup.forEach((obj) => {
+            const myTime = moment().format("h:mm:ss");
+            const myTimeStart = moment(new Date(Date.now() - 1 * 60 * 60 * 1000)).format("h:mm:ss");
+            const {time} = obj
+            const isBetween = moment(time, "h:mm:ss").isBetween(moment(myTimeStart, "h:mm:ss"), moment(myTime, "h:mm:ss"))
+            expect(isBetween).to.be.equal(true)
         })
+      })
     })
+    it("GET - responds with a 404 when the path is incorrect", () => {
+      return request(app)
+        .get("/api/pickup/invalid")
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).to.equal("Path not found");
+        });
+    });
+    it("Responds with statuscode 405, and an error message when invalid request methods are used", () => {
+      const invalidMethods = ["post", "patch", "delete", "put"];
+      const methodPromises = invalidMethods.map((method) => {
+        return request(app)
+          [method]("/api/pickup/pasthour")
+          .expect(405)
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal("Method not allowed");
+          });
+      });
+      return Promise.all(methodPromises);
+    });
   })
   describe("/marker", () => {
     it("GET - gets all markers from the database in the correct format", () => {
@@ -313,7 +339,7 @@ describe("/api", () => {
           });
         });
     });
-    it("POST - saves new markers to database", () => {
+    xit("POST - saves new markers to database", () => {
       return request(app)
         .post("/api/marker")
         .send({ latitude: 6.35333, longitude: 33.535, type: "police" })
@@ -331,6 +357,14 @@ describe("/api", () => {
             "longitude",
             "type",
           ]);
+        });
+    });
+    it("GET - responds with a 404 when the path is incorrect", () => {
+      return request(app)
+        .get("/api/invalid")
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).to.equal("Path not found");
         });
     });
     it("POST - Returns a 400 error message when required keys are not in post request", () => {
@@ -371,8 +405,20 @@ describe("/api", () => {
           .then(({ body: { marker } }) => {
             expect(marker).to.be.an("array");
             marker.forEach((obj) => {
-              expect(obj.time).to
-            })
+              const myTime = moment().format("h:mm:ss");
+              const myTimeStart = moment(new Date(Date.now() - 1 * 60 * 60 * 1000)).format("h:mm:ss");
+              const {time} = obj
+              const isBetween = moment(time, "h:mm:ss").isBetween(moment(myTimeStart, "h:mm:ss"), moment(myTime, "h:mm:ss"))
+              expect(isBetween).to.be.equal(true)
+          })
+          });
+      });
+      it("GET - responds with a 404 when the path is incorrect", () => {
+        return request(app)
+          .get("/api/marker/invalid")
+          .expect(404)
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal("Path not found");
           });
       });
       it("Responds with statuscode 405, and an error message when invalid request methods are used", () => {
