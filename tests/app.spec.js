@@ -243,6 +243,7 @@ describe("/api", () => {
         .get("/api/pickup/hour")
         .expect(200)
         .then(({ body: { pickup } }) => {
+          console.log(pickup)
           expect(pickup).to.be.an("array");
         });
     });
@@ -337,7 +338,7 @@ describe("/api", () => {
       });
       return Promise.all(methodPromises);
     });
-    describe.only("/marker/hour", () => {
+    describe("/marker/hour", () => {
       it("GET - gets all markers from past hour", () => {
         return request(app)
           .get("/api/marker/hour")
