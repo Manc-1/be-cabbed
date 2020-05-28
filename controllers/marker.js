@@ -32,7 +32,7 @@ exports.sendMarkerFromHour = (req, res, next) => {
 
 
 exports.postMarker = async (req, res, next) => {
-  const { latitude, longitude, type, date, time } = req.body;
+  const { latitude, longitude, type, date, time, user } = req.body;
   try {
     const newMarker = new Marker({
       latitude,
@@ -40,11 +40,23 @@ exports.postMarker = async (req, res, next) => {
       type,
       date,
       time,
+      user,
     });
     await newMarker.save();
     res.status(200).send({ marker: { ...newMarker._doc } });
   } catch (err) {
     res.status(400).send({ msg: "Bad request" });
   }
+};
+
+exports.sendMarkerById = (req, res, next) => {
+  const { user } = req.params;
+  Marker.find({ user: user}, function (err, marker) {
+    if (err) {
+      res.send(err);
+    } else {
+      res.status(200).send({ marker });
+    }
+  });
 };
 
