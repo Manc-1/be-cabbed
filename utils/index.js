@@ -41,13 +41,30 @@ const randomGeoPoints = (centrePoint, radius, positionCount, startDate, endDate 
       
     const randomDate = new Date(startDate.getTime() + Math.random() * (endDate.getTime() - startDate.getTime()));
   
-    // const markers = ['police', 'closing', 'drunk', 'social event']
-    // const marker = markers[Math.floor(Math.random() * markers.length)];
+     const markers = ['police', 'closing', 'drunk', 'social event']
+     const marker = markers[Math.floor(Math.random() * markers.length)];
+
+    const users = ["5ec557933303033c03651588", 
+    "5ec55a82d1e1873fc1493e35",  
+    "5ec55af29c9e77401ee9477d", 
+    "5ec55c9900e979422529a115", 
+    "5ec55d3fa2155542d977fd9f", 
+    "5ec55d67e36c414319bc24e3", 
+    "5ec55d9723fd3c43792d3a87", 
+    "5ec55dab328fb443aac08121", 
+    "5ec55df4d73a9744036de9b8", 
+    "5ec5604b0ea16b47fe81f25c", 
+    "5eccd023001dc2001740a0c7", 
+    "5eccf953ca654900174dbd0a", 
+    "5ece449bef3c4f00175d3ac4"]
+    const user = users[Math.floor(Math.random() * users.length)]
        
     return { latitude: lat, longitude: long, 
         date:moment(randomDate).format("dddd, MMMM Do YYYY"), 
         time:moment(randomDate).format("h:mm:ss"),
-        __v: 0
+        __v: 0,
+        user: user,
+        type: marker
   };
   };
   
@@ -64,6 +81,6 @@ const randomGeoPoints = (centrePoint, radius, positionCount, startDate, endDate 
 
   
   // Takes a central points coordinates, a radius and a number of points
-  console.log(randomGeoPoints({ lat: 53.478056, lng: -2.245833 }, 1500, 300, new Date(2020, 4, 4), new Date(2020, 5, 1)));
+  console.log(randomGeoPoints({ lat: 53.478056, lng: -2.245833 }, 1500, 20, new Date(2020, 4, 4), new Date(2020, 5, 1)));
   
   module.exports = { randomGeoPoints, generateRandomPoint, currentTime };

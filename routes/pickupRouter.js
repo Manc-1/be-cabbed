@@ -3,7 +3,8 @@ const {
   sendPickup,
   postPickup,
   sendPickupFromHour,
-  sendPickupFromPastHours
+  sendPickupFromPastHours,
+  sendPickupById
 } = require("../controllers/pickup");
 
 const { send405Error } = require("../errors/index");
@@ -14,5 +15,6 @@ pickupRouter.route("/hour").get(sendPickupFromHour).all(send405Error);
 
 pickupRouter.route('/pasthour').get(sendPickupFromPastHours).all(send405Error);
 
+pickupRouter.route('/:user').get(sendPickupById).all(send405Error)
 
 module.exports = pickupRouter;

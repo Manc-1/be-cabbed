@@ -7,6 +7,7 @@ const Marker = new mongoose.Schema({
   type: { type: String, required: true },
   date: { type: String, default: () => moment().format("dddd, MMMM Do YYYY") },
   time: { type: String, default: () => moment().format("h:mm:ss") },
+  user: { type: String, required: true }
 });
 
 module.exports = mongoose.model("marker", Marker);

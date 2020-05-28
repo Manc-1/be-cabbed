@@ -192,14 +192,15 @@ describe("/api", () => {
               "latitude",
               "longitude",
               "__v",
+              'user'
             ]);
           });
         });
     });
-    xit("POST - saves new data to database", () => {
+    it("POST - saves new data to database", () => {
       return request(app)
         .post("/api/pickup")
-        .send({ latitude: 3.33333, longitude: 54.555 })
+        .send({ latitude: 3.33333, longitude: 54.555, user: '5ec557933303033c03651588' })
         .expect(200)
         .then(({ body: { pickup } }) => {
           expect(pickup.latitude).to.eql(3.33333);
@@ -257,6 +258,7 @@ describe("/api", () => {
               "latitude",
               "longitude",
               "__v",
+              "user",
             ]);
           })
         });
@@ -319,6 +321,36 @@ describe("/api", () => {
       return Promise.all(methodPromises);
     });
   })
+  describe('/pickup/:user', () => {
+    it('GET - gets all pickups from a user', () => {
+      return request(app)
+        .get('/api/pickup/5ec557933303033c03651588')
+        .expect(200)
+        .then(({body: {pickup}}) => {
+          expect(pickup).to.be.an('array')
+          pickup.forEach(obj => {
+            expect(obj).to.have.all.keys([
+              "_id",
+              "date",
+              "time",
+              "latitude",
+              "longitude",
+              "__v",
+              "user",
+            ])
+            expect(obj.user).to.equal('5ec557933303033c03651588')
+          })
+        })
+    })
+    it("Returns an error code when de user id does not exist", () => {
+      return request(app)
+        .get("/api/pickup/5ec4f809549d6c5123c50a123INVALID")
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).to.equal("Id not found");
+        });
+    });
+  })
   describe("/marker", () => {
     it("GET - gets all markers from the database in the correct format", () => {
       return request(app)
@@ -335,19 +367,20 @@ describe("/api", () => {
               "latitude",
               "longitude",
               "type",
+              "user",
             ]);
           });
         });
     });
-    xit("POST - saves new markers to database", () => {
+    it("POST - saves new markers to database", () => {
       return request(app)
         .post("/api/marker")
-        .send({ latitude: 6.35333, longitude: 33.535, type: "police" })
+        .send({ latitude:53.48565569808902,longitude:-2.241400606379679, type: "closing", user: '5ec557933303033c03651588' })
         .expect(200)
         .then(({ body: { marker } }) => {
-          expect(marker.latitude).to.eql(6.35333);
-          expect(marker.longitude).to.eql(33.535);
-          expect(marker.type).to.eql("police");
+          expect(marker.latitude).to.eql(53.48565569808902);
+          expect(marker.longitude).to.eql(-2.241400606379679);
+          expect(marker.type).to.eql("closing");
           expect(marker).to.have.keys([
             "_id",
             "date",
@@ -356,6 +389,7 @@ describe("/api", () => {
             "latitude",
             "longitude",
             "type",
+            "user",
           ]);
         });
     });
@@ -397,6 +431,7 @@ describe("/api", () => {
       });
       return Promise.all(methodPromises);
     });
+  });
     describe("/marker/hour", () => {
       it("GET - gets all markers from past hour", () => {
         return request(app)
@@ -434,5 +469,35 @@ describe("/api", () => {
         return Promise.all(methodPromises);
       });
     });
-  });
+    describe('/marker/:user', () => {
+      it('GET - gets all markers from a user', () => {
+        return request(app)
+          .get('/api/marker/5ec557933303033c03651588')
+          .expect(200)
+          .then(({body: {marker}}) => {
+            expect(marker).to.be.an('array')
+            marker.forEach(obj => {
+              expect(obj).to.have.all.keys([
+                "_id",
+                "date",
+                "time",
+                "latitude",
+                "longitude",
+                "__v",
+                "type",
+                "user",
+              ])
+              expect(obj.user).to.equal('5ec557933303033c03651588')
+            })
+          })
+      })
+      it("Returns an error code when de user id does not exist", () => {
+        return request(app)
+          .get("/api/marker/5ec4f809549d6c5123c50a123INVALID")
+          .expect(404)
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal("Id not found");
+          });
+      });
+    }) 
 });
