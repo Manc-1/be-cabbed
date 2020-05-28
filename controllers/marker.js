@@ -52,8 +52,8 @@ exports.postMarker = async (req, res, next) => {
 exports.sendMarkerById = (req, res, next) => {
   const { user } = req.params;
   Marker.find({ user: user}, function (err, marker) {
-    if (err) {
-      res.send(err);
+    if (!marker.length) {
+      res.status(404).send({ msg: "Not found" });
     } else {
       res.status(200).send({ marker });
     }
