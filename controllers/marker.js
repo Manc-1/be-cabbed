@@ -51,11 +51,11 @@ exports.postMarker = async (req, res, next) => {
 
 exports.sendMarkerById = (req, res, next) => {
   const { user } = req.params;
-  Marker.find({ user: user}, function (err, marker) {
-    if (err) {
-      res.send(err);
+  Marker.collection.countDocuments({ user: user}, function (err, marker) {
+    if (marker === 0) {
+      res.status(404).send({ msg: "Not found" });
     } else {
-      res.status(200).send({ marker });
+      res.status(200).send({ marker: marker.toString() });
     }
   });
 };

@@ -130,6 +130,30 @@
       ]
     }
   },
+  "GET /pickup/:user": {
+    "description": "Gets all pickup data for a specified user from the database",
+    "queries": [],
+    "exampleResponse": {
+      "pickup": [
+        {
+          "_id": "5ec6a4f7db564d1e02766056",
+          "latitude": 5.33333,
+          "longitude": 35.555,
+          "date": "Thursday, May 21st 2020",
+          "time": "4:57:43",
+          "__v": 0
+        },
+        {
+          "_id": "5ec6a4f7db564d1e02766056",
+          "latitude": 4.33333,
+          "longitude": 34.555,
+          "date": "Thursday, May 21st 2020",
+          "time": "5:02:11",
+          "__v": 0
+        }
+      ]
+    }
+  },
   "GET /marker": {
     "description": "Gets all marker data from the database",
     "queries": [],
@@ -172,6 +196,32 @@
           "type": "police",
           "date": "Friday, May 22nd 2020",
           "time": "8:45:47",
+          "__v": 0
+        }
+      ]
+    }
+  },
+  "GET /marker/:user": {
+    "description": "Gets all marker data for a specified user from the database",
+    "queries": [],
+    "exampleResponse": {
+      "marker": [
+        {
+          "_id": "5ec6a4f7db564d1e02766056",
+          "latitude": 5.33333,
+          "longitude": 35.555,
+          "date": "Thursday, May 21st 2020",
+          "time": "4:57:43",
+          "type": "police",
+          "__v": 0
+        },
+        {
+          "_id": "5ec6a4f7db564d1e02766056",
+          "latitude": 4.33333,
+          "longitude": 34.555,
+          "date": "Thursday, May 21st 2020",
+          "time": "5:02:11",
+          "type": "police",
           "__v": 0
         }
       ]

@@ -47,6 +47,10 @@ GET /api/pickup/hour
 GET /api/pickup/pasthour
 ```
 
+```http
+GET /api/pickup/:user
+```
+
 ## /api/marker
 
 ```http
@@ -59,4 +63,8 @@ POST /api/marker
 
 ```http
 GET /api/marker/hour
+```
+
+```http
+GET /api/marker/:user
 ```
