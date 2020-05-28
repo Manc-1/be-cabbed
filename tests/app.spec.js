@@ -327,19 +327,8 @@ describe("/api", () => {
         .get('/api/pickup/5ec557933303033c03651588')
         .expect(200)
         .then(({body: {pickup}}) => {
-          expect(pickup).to.be.an('array')
-          pickup.forEach(obj => {
-            expect(obj).to.have.all.keys([
-              "_id",
-              "date",
-              "time",
-              "latitude",
-              "longitude",
-              "__v",
-              "user",
-            ])
-            expect(obj.user).to.equal('5ec557933303033c03651588')
-          })
+          expect(pickup).to.be.an('string')
+          expect(pickup).to.equal('10')
         })
     })
     it("Returns an error code when de user id does not exist", () => {
@@ -475,22 +464,10 @@ describe("/api", () => {
           .get('/api/marker/5ec557933303033c03651588')
           .expect(200)
           .then(({body: {marker}}) => {
-            expect(marker).to.be.an('array')
-            marker.forEach(obj => {
-              expect(obj).to.have.all.keys([
-                "_id",
-                "date",
-                "time",
-                "latitude",
-                "longitude",
-                "__v",
-                "type",
-                "user",
-              ])
-              expect(obj.user).to.equal('5ec557933303033c03651588')
-            })
-          })
+            expect(marker).to.be.an('string')
+            expect(marker).to.equal('13')
       })
+    })
       it("Returns an error code when de user id does not exist", () => {
         return request(app)
           .get("/api/marker/5ec4f809549d6c5123c50a123INVALID")
