@@ -7,6 +7,7 @@ const Pickup = new mongoose.Schema({
   longitude: { type: Number, required: true },
   date: { type: String, default: () => moment().format("dddd, MMMM Do YYYY") },
   time: { type: String, default: () => moment().format("h:mm:ss") },
+  user: { type: String, required: true }
 });
 
 module.exports = mongoose.model("pickup", Pickup);
