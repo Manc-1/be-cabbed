@@ -68,13 +68,24 @@ exports.postPickup = async (req, res, next) => {
 };
 
 
+// exports.sendPickupById = (req, res, next) => {
+//   const { user } = req.params;
+//   Pickup.find({ user: user}, function (err, pickup) {
+//     if (!pickup.length) {
+//       res.status(404).send({ msg: "Not found" });
+//     } else {
+//       res.status(200).send({ pickup });
+//     }
+//   });
+// };
+
 exports.sendPickupById = (req, res, next) => {
   const { user } = req.params;
-  Pickup.find({ user: user}, function (err, pickup) {
-    if (!pickup.length) {
+  Pickup.collection.countDocuments({ user: user}, function (err, pickup) {
+    if (pickup === 0) {
       res.status(404).send({ msg: "Not found" });
     } else {
-      res.status(200).send({ pickup });
+      res.status(200).send({ pickup: pickup.toString() });
     }
   });
 };
