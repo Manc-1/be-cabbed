@@ -1,5 +1,4 @@
 const { expect } = require("chai");
-const User = require("../model/user");
 const app = require("../app");
 const request = require("supertest");
 const moment = require("moment");
@@ -328,7 +327,7 @@ describe("/api", () => {
         .expect(200)
         .then(({body: {pickup}}) => {
           expect(pickup).to.be.an('string')
-          expect(pickup).to.equal('10')
+          expect(pickup).to.equal('18')
         })
     })
     it("Returns an error code when de user id does not exist", () => {
@@ -465,7 +464,7 @@ describe("/api", () => {
           .expect(200)
           .then(({body: {marker}}) => {
             expect(marker).to.be.an('string')
-            expect(marker).to.equal('13')
+            expect(marker).to.equal('22')
       })
     })
       it("Returns an error code when de user id does not exist", () => {

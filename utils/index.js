@@ -4,8 +4,6 @@
 // PositionCount = 200 points
 const moment = require('moment');
 
-const startDate = new Date(2001, 0, 1)
-const endDate = new Date()
 
 const randomGeoPoints = (centrePoint, radius, positionCount, startDate, endDate ) =>{
     const geoJSON = { points: [] };
